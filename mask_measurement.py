@@ -1,20 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-4f 光学频域掩膜数据定量评估系统 (终极严谨计量版)
-核心规范化升级：
-1. 规范直流抑制率 (DC Suppression)：分子与分母严格在相同几何平坦区 (¬M_edge) 统计，消除口径不一致。
-2. 规范化命名：sparsity_ratio 正式重命名为 active_pixel_ratio (有效亮像素比)。
-3. 暴露关键中间物理量：同时输出 n_edge, n_flat, curr_dc, base_dc，提供完整的可核验追溯链路。
-4. 增强工程健壮性：自动清洗 PowerShell 拖入路径包含的 '&' 与引号，支持中文路径。
-"""
-
 import cv2
 import numpy as np
 import os
 import sys
 
 def imread_unicode(img_path):
-    """支持中文与特殊字符的安全图片读取"""
     try:
         img_array = np.fromfile(img_path, dtype=np.uint8)
         return cv2.imdecode(img_array, cv2.IMREAD_GRAYSCALE)
@@ -22,7 +11,6 @@ def imread_unicode(img_path):
         return None
 
 def clean_input_path(raw_path):
-    """清洗 Windows / PowerShell 拖拽文件路径的特殊前缀与引号"""
     path = raw_path.strip()
     if path.startswith("&"):
         path = path[1:].strip()
